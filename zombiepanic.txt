@@ -1,0 +1,5 @@
+"zombiepanic"
+{
+	"title"	"Zombie Panic"
+	"base"	"base"
+}

@@ -1,5 +1,0 @@
-"gamemodename"
-{
-	"title"	"Gamemode Name"
-	"base"	"base"
-}
