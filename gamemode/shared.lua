@@ -5,44 +5,66 @@ GM.Author 		= ""
 GM.Email 		= ""
 GM.Website 		= ""
 
-function recursiveInclusion(scanDirectory)
-	--print("Searching: " .. scanDirectory .. "/")
-	local files, directories = file.Find(scanDirectory .. "/*", "LUA")
-
+function recursiveInclusion( scanDirectory, isGamemode )
+	-- Null-coalescing for optional argument
+	isGamemode = isGamemode or false
 	
-	--Recursively scan discovered directories
-	for _, v in pairs(directories) do
-		recursiveInclusion(scanDirectory .. "/" .. v)
-	end
+	local queue = { scanDirectory }
 	
-	--Handle all discovered files
-	for _, v in pairs(files) do
-		--Chop off first two directories, to satisfy inclusion path requirement
-		local relativePath = string.gsub(scanDirectory .. "/" .. v, GM.FolderName .. "/gamemode/", "")
-		
-		if not (v == "shared.lua" or v == "init.lua" or v == "cl_init.lua") then
-		
-			if string.match( v, "^sv") then
-				--print("Found: " .. v)
-				include(relativePath)
-			elseif string.match( v, "^sh") then
-				--print("Found: " .. v)
-				include(relativePath)
+	-- Loop until queue is cleared
+	while #queue > 0 do
+		-- For each directory in the queue...
+		for _, directory in pairs( queue ) do
+			-- print( "Scanning directory: ", directory )
 			
-				if SERVER then
-					AddCSLuaFile(relativePath)
-				end
-			elseif string.match( v, "^cl") then
-				--print("Found: " .. v)
-				AddCSLuaFile(relativePath)
-				
-				if CLIENT then
-					include(relativePath)
+			local files, directories = file.Find( directory .. "/*", "LUA" )
+			
+			-- Include files within this directory
+			for _, fileName in pairs( files ) do
+				if fileName != "shared.lua" and fileName != "init.lua" and fileName != "cl_init.lua" then
+					-- print( "Found: ", fileName )
+					
+					-- Create a relative path for inclusion functions
+					-- Also handle pathing case for including gamemode folders
+					local relativePath = directory .. "/" .. fileName
+					if isGamemode then
+						relativePath = string.gsub( scanDirectory .. "/", GM.FolderName .. "/gamemode/", "" )
+					end
+					
+					-- Include server files
+					if string.match( fileName, "^sv" ) then
+						if SERVER then
+							include( relativePath )
+						end
+					end
+					
+					-- Include shared files
+					if string.match( fileName, "^sh" ) then
+						AddCSLuaFile( relativePath )
+						include( relativePath )
+					end
+					
+					-- Include client files
+					if string.match( fileName, "^cl" ) then
+						AddCSLuaFile( relativePath )
+						
+						if CLIENT then
+							include( relativePath )
+						end
+					end
 				end
 			end
 			
+			-- Append directories within this directory to the queue
+			for _, subdirectory in pairs( directories ) do
+				-- print( "Found directory: ", subdirectory )
+				table.insert( queue, directory .. "/" .. subdirectory )
+			end
+			
+			-- Remove this directory from the queue
+			table.RemoveByValue( queue, directory )
 		end
 	end
 end
 
-recursiveInclusion(GM.FolderName .. "/gamemode")
+recursiveInclusion( GM.FolderName .. "/gamemode", true )
