@@ -28,7 +28,7 @@ function recursiveInclusion( scanDirectory, isGamemode )
 					-- Also handle pathing case for including gamemode folders
 					local relativePath = directory .. "/" .. fileName
 					if isGamemode then
-						relativePath = string.gsub( scanDirectory .. "/", GM.FolderName .. "/gamemode/", "" )
+						relativePath = string.gsub( directory .. "/" .. fileName, GM.FolderName .. "/gamemode/", "" )
 					end
 					
 					-- Include server files
