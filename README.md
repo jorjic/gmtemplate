@@ -1,7 +1,19 @@
-# jumpstart-gamemode-template
-A gamemode template for usage in Garry's Mod
+# gmtemplate
+_**gmtemplate**_ is a bare-bones Garry's Mod gamemode template designed to cut down on the hassle of creating new gamemodes. 
+
+## Features
+* An empty content/ directory tree, to make organizing new content as easy as possible.
+* A recursive file includer, which eliminates the trouble of `include` and `AddCSLuaFile`.
 
 ## Usage
-Clone repository as a new gamemode directory. Rename changeme.txt and modify file to match your gamemode. Modify shared.lua to match your gamemode name, author, website, and contact email. New code may be placed anywhere within the gamemode subdirectory. Files will be included automatically, with file prefix indicating which environments the file should be executed in.
+* Clone repository as a new gamemode directory
+* Rename changeme.txt and modify file to match your gamemode
+* Update gamemode details in shared.lua 
+* Create new lua files anywhere within the gamemode/ subdirectory with the appropriate naming prefix
+  * (Lua files will be automatically included in the appropriate context on next map refresh)
+  * Files with the cl\_\* prefix will be included on clients. 
+  * Files with the sh\_\* prefix will be included on clients and the server. 
+  * Files with the sv\_\* prefix will be included on the server. 
+  * Files with no matching prefix will not be included.
 
-Files with the cl\* prefix will be included on clients. Files with the sh\* prefix will be included on clients and the server. Files with the sv\* prefix will be included on the server. Files with no matching prefix will not be included.
+New directories created within the gamemode/ subdirectory will automatically be searched in the automatic inclusion.
