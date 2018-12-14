@@ -16,6 +16,6 @@ _**gmtemplate**_ is a bare-bones Garry's Mod gamemode template designed to cut d
   * Files with the cl\_\* prefix will be included on clients. 
   * Files with the sh\_\* prefix will be included on clients and the server. 
   * Files with the sv\_\* prefix will be included on the server. 
-  * Files with no matching prefix will not be included.
+  * Files with no matching prefix will be included on the server, If you want exclude files use `ExcludeFiles` parameter.
 
 New directories created within the `gamemode/` subdirectory will automatically be searched in the automatic inclusion.

@@ -5,10 +5,10 @@ GM.Author 		= ""
 GM.Email 		= ""
 GM.Website 		= ""
 
-function recursiveInclusion( scanDirectory, isGamemode )
+function recursiveInclusion( scanDirectory, isGamemode, ExcludeFiles )
 	-- Null-coalescing for optional argument
 	isGamemode = isGamemode or false
-	
+	ExcludeFiles = ExcludeFiles or {}
 	local queue = { scanDirectory }
 	
 	-- Loop until queue is cleared
@@ -33,25 +33,40 @@ function recursiveInclusion( scanDirectory, isGamemode )
 					
 					-- Include server files
 					if string.match( fileName, "^sv" ) then
-						if SERVER then
-							include( relativePath )
+						if !table.HasValue(ExcludeFiles, relativePath) then
+							if SERVER then
+								include( relativePath )
+							end
 						end
 					end
 					
 					-- Include shared files
 					if string.match( fileName, "^sh" ) then
-						AddCSLuaFile( relativePath )
-						include( relativePath )
+						if !table.HasValue(ExcludeFiles, relativePath) then
+							AddCSLuaFile( relativePath )
+							include( relativePath )
+						end
 					end
 					
 					-- Include client files
 					if string.match( fileName, "^cl" ) then
-						AddCSLuaFile( relativePath )
-						
-						if CLIENT then
-							include( relativePath )
+						if !table.HasValue(ExcludeFiles, relativePath) then
+							AddCSLuaFile( relativePath )
+							
+							if CLIENT then
+								include( relativePath )
+							end
 						end
 					end
+
+					-- Include all another files not prefixed 
+					if !string.match( fileName, "^sv" ) and !string.match( fileName, "^sh" ) and !string.match( fileName, "^cl" ) then
+						if !table.HasValue(ExcludeFiles, relativePath) then
+                        	if SERVER then
+                                include( relativePath )
+                            end
+                        end
+                    end
 				end
 			end
 			
@@ -67,4 +82,6 @@ function recursiveInclusion( scanDirectory, isGamemode )
 	end
 end
 
-recursiveInclusion( GM.FolderName .. "/gamemode", true )
+recursiveInclusion( GM.FolderName .. "/gamemode", true, {
+	-- "extras/cl_flash_on_ready.lya"
+} )
