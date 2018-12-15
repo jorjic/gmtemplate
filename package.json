@@ -1,0 +1,20 @@
+{
+  "name": "gmtemplate",
+  "version": "1.0.0",
+  "description": "_**gmtemplate**_ is a bare-bones Garry's Mod gamemode template designed to cut down on the hassle of creating new gamemodes.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jorjic/gmtemplate.git"
+  },
+  "keywords": ["garry's", "mod", "lua", "gamemode", "template", "gm", "gmod"],
+  "author": "jorjic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jorjic/gmtemplate/issues"
+  },
+  "homepage": "https://github.com/jorjic/gmtemplate#readme"
+}
