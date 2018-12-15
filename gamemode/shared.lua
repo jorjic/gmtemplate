@@ -83,5 +83,5 @@ function recursiveInclusion( scanDirectory, isGamemode, ExcludeFiles )
 end
 
 recursiveInclusion( GM.FolderName .. "/gamemode", true, {
-	-- "extras/cl_flash_on_ready.lya"
+	-- "extras/cl_flash_on_ready.lua"
 } )
